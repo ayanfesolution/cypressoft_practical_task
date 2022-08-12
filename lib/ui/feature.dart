@@ -16,6 +16,7 @@ class _FeaturesPackState extends State<FeaturesPack> {
         Text('Album Title ${widget.albumId}'),
         ListView.builder(
             itemCount: 4,
+            scrollDirection: Axis.horizontal,
             itemBuilder: (BuildContext context, int index) {
               return SizedBox(
                 height: 150,
