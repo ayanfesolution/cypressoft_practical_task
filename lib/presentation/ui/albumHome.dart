@@ -1,5 +1,7 @@
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/networkLayer/apiservices.dart';
 import '../utilities/constants.dart';
 import 'feature.dart';
@@ -13,7 +15,7 @@ class AlbumList extends StatefulWidget {
 
 class _AlbumListState extends State<AlbumList> {
   final ApiServices apiServices = ApiServices();
-  List albumList = [];
+  List<int>  albumList = [];
 
   @override
   void initState() {
@@ -24,9 +26,10 @@ class _AlbumListState extends State<AlbumList> {
 
   Future<void> initAction() async {
     var list = await apiServices.getTheAlbumIdLists();
-     setState(() {
-       albumList = list;
-     });
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      albumList = list;
+    });
   }
 
   @override
@@ -36,67 +39,46 @@ class _AlbumListState extends State<AlbumList> {
       appBar: AppBar(
         title:  const Text('Practical Task'),
       ),
-      body: ListView.builder(
-          itemCount: albumList.length,
-          shrinkWrap: true,
-          itemBuilder: (BuildContext context, int index) {
-            int num = albumList[index] ?? 0;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 5, left: 8),
-                  child: Text('Album Title $num', style: textTheme.headline5,),
-                ),
-                FeaturesPack(albumId: num,),
-                const Divider(
-                  thickness: 2.5,
-                  color: kLineColor,
-                )
+      body: albumList.isNotEmpty ?
+            CarouselSlider.builder(
+                  itemCount: albumList.length,
+                  itemBuilder: (BuildContext context, int index, int pageViewIndex){
+                  int num = albumList[index];
+                   return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                            Padding(
+                                padding: const EdgeInsets.only(top: 5, left: 8),
+                                child: Text('Album Title $num', style: textTheme.headline5,),
+                             ),
+                            FeaturesPack(albumId: num,),
+                            const Divider(
+                            thickness: 2.5,
+                            color: kLineColor,
+                            )
               ],
             );
-          }),
-      // FutureBuilder(
-      //     future: apiServices.getTheAlbumIdLists(),
-      //     builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
-      //       if (snapshot.hasData) {
-      //         ListView.builder(
-      //             itemCount: snapshot.data?.length,
-      //             shrinkWrap: true,
-      //             itemBuilder: (BuildContext context, int index) {
-      //               int num = snapshot.data?[index] ?? 0;
-      //               return Column(
-      //                 crossAxisAlignment: CrossAxisAlignment.start,
-      //                 children: [
-      //                   Padding(
-      //                     padding: const EdgeInsets.only(top: 5, left: 8),
-      //                     child: Text('Album Title $num', style: textTheme.headline5,),
-      //                   ),
-      //                   FeaturesPack(albumId: num,),
-      //                   const Divider(
-      //                     thickness: 2.5,
-      //                     color: kLineColor,
-      //                   )
-      //                 ],
-      //               );
-      //             });
-      //       }
-      //       if (snapshot.hasError) {
-      //         return Text('Error');
-      //       }
-      //       return Center(
-      //           child: Column(
-      //             children: const [
-      //               CircularProgressIndicator(),
-      //               SizedBox(
-      //                 height: 20.0,
-      //               ),
-      //               Text('Loading at the moment, please hold the line')
-      //             ],
-      //           )
-      //       );
-      //     }
-      // ),
+          },
+          options: CarouselOptions(
+              enableInfiniteScroll: true,
+              scrollDirection: Axis.vertical,
+              enlargeCenterPage: false,
+              viewportFraction: 0.35,
+              height: double.maxFinite,
+              initialPage: 0
+          )
+      ) :
+            Center(
+                child: Column(
+                  children: const [
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          height: 20.0,
+                      ),
+                        Text('Loading at the moment, please hold the line')
+                      ],
+                 ),
+         )
     );
   }
 }
