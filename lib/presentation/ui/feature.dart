@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cypressoft_practical_task/data/model/photoAlbumModel.dart';
 import 'package:flutter/material.dart';
 import '../../data/networkLayer/apiservices.dart';
@@ -23,10 +24,9 @@ class _FeaturesPackState extends State<FeaturesPack> {
           return SizedBox(
             height: 175,
             width: double.maxFinite,
-            child: ListView.builder(
+            child: CarouselSlider.builder(
                 itemCount: snapshot.data?.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
+                itemBuilder: (context, index, pageIndex) {
                   var currentAlbum = snapshot.data?[index];
                   return Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8),
@@ -50,8 +50,12 @@ class _FeaturesPackState extends State<FeaturesPack> {
                       ),
                     ),
                   );
-                }
-            ),
+                },
+                options: CarouselOptions(
+                  scrollDirection: Axis.horizontal,
+                  enableInfiniteScroll: true,
+                  viewportFraction: 0.5
+                ))
           );
         }
         if (snapshot.hasError) {
