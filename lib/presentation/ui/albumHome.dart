@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/networkLayer/apiservices.dart';
 import '../utilities/constants.dart';
+import 'album_photo_lists.dart';
 import 'feature.dart';
 
 class AlbumList extends StatefulWidget {
@@ -51,7 +52,7 @@ class _AlbumListState extends State<AlbumList> {
                                 padding: const EdgeInsets.only(top: 5, left: 8),
                                 child: Text('Album Title $num', style: textTheme.headline5,),
                              ),
-                            FeaturesPack(albumId: num,),
+                            AlbumPhotoLists(albumId: num,),
                             const Divider(
                             thickness: 2.5,
                             color: kLineColor,

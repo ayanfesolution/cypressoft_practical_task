@@ -36,10 +36,10 @@ flutter:
 #  fonts:
 #    - family: Comfortaa
 #      fonts:
-#        - asset: fonts/Comfortaa-Regular.ttf
-#        - asset: fonts/Comfortaa-Bold.ttf
+#        - assets: fonts/Comfortaa-Regular.ttf
+#        - assets: fonts/Comfortaa-Bold.ttf
 #
 #    - family: Inter
 #      fonts:
-#        - asset: fonts/Inter-Regular.ttf
-#        - asset: fonts/Inter-Bold.ttf
+#        - assets: fonts/Inter-Regular.ttf
+#        - assets: fonts/Inter-Bold.ttf

@@ -7,29 +7,17 @@ import '../model/photoAlbumModel.dart';
 
 class ApiServices {
 
-  Future<List<PhotoAlbums>> getThePhotoAlbum(int albumId) async {
-    var url = Uri.parse(baseAlbumUrl+"${albumId}");
+  Future<dynamic> getThePhotoAlbum(int albumId) async {
+    var url = Uri.parse("$baseAlbumUrl$albumId");
     http.Response response = await http.get(url);
     if (response.statusCode == 200) {
-      if (kDebugMode) {
-        print('Get photo album : Response status: ${response.statusCode}');
-        print('Get photo album  : Response body: ${response.body}');
-      }
-      final body = json.decode(response.body) as List;
-      return body.map((dynamic json) {
-        final albumData = json as Map<String, dynamic>;
-        return PhotoAlbums(
-            albumId: albumData['albumId'],
-            id: albumData['id'],
-            title: albumData['title'],
-            url: albumData['url'],
-            thumbnailUrl: albumData['thumbnailUrl']
-        );
-      }).toList();
+      final body = json.decode(response.body);
+      return body;
     } else {
       throw Exception("Something gone wrong, ${response.statusCode}");
     }
   }
+
 
   Future<List<PhotoAlbums>> getAllThePhotoAlbumsIds() async {
     var url = Uri.parse("https://jsonplaceholder.typicode.com/photos");
