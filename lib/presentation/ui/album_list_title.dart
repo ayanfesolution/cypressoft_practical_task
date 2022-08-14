@@ -21,7 +21,9 @@ class _AlbumListTitleState extends State<AlbumListTitle> {
   void initState() {
     super.initState();
     setState(() {
-      _photoAlbums = box.get('ids');
+      if (box.get('ids') != null) {
+        _photoAlbums = box.get('ids');
+      }
     });
     BlocProvider.of<AlbumIdBloc>(context).add(GetAlbumIdEvent());
   }
