@@ -1,9 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cypressoft_practical_task/presentation/ui/widgets/album_photos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import '../../bloc/album_home_id_bloc/album_id_bloc.dart';
 import '../utilities/constants.dart';
-import 'album_photo_lists.dart';
 
 class AlbumListTitle extends StatefulWidget {
   const AlbumListTitle({Key? key}) : super(key: key);
@@ -13,13 +14,20 @@ class AlbumListTitle extends StatefulWidget {
 }
 
 class _AlbumListTitleState extends State<AlbumListTitle> {
+  var box = Hive.box('albumList');
+  List<int> _photoAlbums = [];
+
   @override
   void initState() {
     super.initState();
+    setState(() {
+      _photoAlbums = box.get('ids');
+    });
     BlocProvider.of<AlbumIdBloc>(context).add(GetAlbumIdEvent());
   }
 
-  List<int> _photoAlbums = [];
+
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -27,7 +35,7 @@ class _AlbumListTitleState extends State<AlbumListTitle> {
       appBar: AppBar(
         title:  const Text('Practical Task'),
       ),
-      body: BlocConsumer<AlbumIdBloc, AlbumIdState>(
+      body: _photoAlbums.isEmpty ? BlocConsumer<AlbumIdBloc, AlbumIdState>(
           bloc: BlocProvider.of<AlbumIdBloc>(context),
           listener: (context, state) {
             if (state is GetAlbumIdError) {
@@ -35,6 +43,7 @@ class _AlbumListTitleState extends State<AlbumListTitle> {
             }
             if (state is GetAlbumIdSuccess) {
               _photoAlbums = state.albumId as List<int>;
+              box.put('ids', _photoAlbums);
             }
           },
           builder: (context, state) {
@@ -55,7 +64,7 @@ class _AlbumListTitleState extends State<AlbumListTitle> {
                         padding: const EdgeInsets.only(top: 5, left: 8),
                         child: Text('Album Title $num', style: textTheme.headline5,),
                       ),
-                      AlbumPhotoLists(albumNum: _photoAlbums[index]),
+                      AlbumPhotoLists(albumId: _photoAlbums[index]),
                       const Divider(
                         thickness: 2.5,
                         color: kLineColor,
@@ -71,7 +80,33 @@ class _AlbumListTitleState extends State<AlbumListTitle> {
                     height: double.maxFinite,
                 )
             );
-          }),
+          }) : CarouselSlider.builder(
+          itemCount: _photoAlbums.length,
+          itemBuilder: (BuildContext context, int index, int pageViewIndex){
+            int num = _photoAlbums[index];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 5, left: 8),
+                  child: Text('Album Title $num', style: textTheme.headline5,),
+                ),
+                AlbumPhotoLists(albumId: _photoAlbums[index]),
+                const Divider(
+                  thickness: 2.5,
+                  color: kLineColor,
+                )
+              ],
+            );
+          },
+          options: CarouselOptions(
+            enableInfiniteScroll: true,
+            scrollDirection: Axis.vertical,
+            enlargeCenterPage: false,
+            viewportFraction: 0.35,
+            height: double.maxFinite,
+          )
+      )
     );
   }
 }

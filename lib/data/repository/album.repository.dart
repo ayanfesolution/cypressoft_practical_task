@@ -1,19 +1,11 @@
 import 'package:cypressoft_practical_task/data/model/photoAlbumModel.dart';
 import 'package:cypressoft_practical_task/data/networkLayer/apiservices.dart';
-import 'package:hive/hive.dart';
 
 class AlbumRepository {
   final ApiServices _apiServices = ApiServices();
 
   Future<List<PhotoAlbums>> getThePhotoAlbum(int albumId) async {
     var data = await _apiServices.getThePhotoAlbum(albumId) as List;
-
-    /// if(internet.connected){
-    /// hive.openBox('albums');
-    ///  return data.map((dynamic json) => PhotoAlbums.fromJson(json)).toList();
-    /// else {
-    /// hive.get('albums)}
-    /// return
     return data.map((dynamic json) {
       final albumData = json as Map<String, dynamic>;
       return PhotoAlbums(

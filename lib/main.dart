@@ -3,8 +3,15 @@ import 'package:cypressoft_practical_task/bloc/album_photo_list_bloc/album_list_
 import 'package:cypressoft_practical_task/presentation/ui/album_list_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 
-void main() {
+import 'data/model/albumhive.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(AlbumHiveAdapter());
+  await Hive.openBox('albumList');
   runApp(const MyApp());
 }
 
@@ -17,10 +24,10 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => AlbumListBloc(),
+            create: (context) => AlbumIdBloc(),
           ),
           BlocProvider(
-            create: (context) => AlbumIdBloc(),
+            create: (context) => AlbumListBloc(),
           )
         ],
         child: MaterialApp(
