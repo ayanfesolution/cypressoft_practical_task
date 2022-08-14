@@ -1,14 +1,11 @@
 import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../../presentation/utilities/constants.dart';
-import '../model/photoAlbumModel.dart';
 
 class ApiServices {
 
   Future<dynamic> getThePhotoAlbum(int albumId) async {
-    var url = Uri.parse("$baseAlbumUrl$albumId");
+    var url = Uri.parse(baseAlbumUrl+albumId.toString());
     http.Response response = await http.get(url);
     if (response.statusCode == 200) {
       final body = json.decode(response.body);

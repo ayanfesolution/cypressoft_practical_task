@@ -69,7 +69,6 @@ class _AlbumListTitleState extends State<AlbumListTitle> {
                     enlargeCenterPage: false,
                     viewportFraction: 0.35,
                     height: double.maxFinite,
-                    initialPage: 0
                 )
             );
           }),

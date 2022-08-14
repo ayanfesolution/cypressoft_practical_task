@@ -57,13 +57,15 @@ class _AlbumPhotoListsState extends State<AlbumPhotoLists> {
                       child: ExtendedImage.network(
                         currentAlbum.thumbnailUrl ?? "",
                         cache: true,
+                        enableMemoryCache: true,
+
                       ),
                     ),
                   );
                 },
                 options: CarouselOptions(
-
                     scrollDirection: Axis.horizontal,
+                    initialPage: 2,
                     height: 200,
                     enableInfiniteScroll: true,
                     viewportFraction: 0.5
