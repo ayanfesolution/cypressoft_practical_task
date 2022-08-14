@@ -8,8 +8,3 @@ class GetPhotoAlbumEvent extends AlbumListEvent {
   @override
   List<Object> get props => [albumId!];
 }
-
-class GetAlbumIdEvent extends AlbumListEvent {
-  @override
-  List<Object> get props => [];
-}

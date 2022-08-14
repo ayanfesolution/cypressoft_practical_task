@@ -1,14 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/album_list_bloc.dart';
+import '../../bloc/album_photo_list_bloc/album_list_bloc.dart';
 import '../../data/model/photoAlbumModel.dart';
 
 class AlbumPhotoLists extends StatefulWidget {
-  AlbumPhotoLists({required this.albumId, Key? key}) : super(key: key);
+  const AlbumPhotoLists({required this.albumNum, Key? key}) : super(key: key);
 
-  int albumId;
+  final int albumNum;
 
   @override
   State<AlbumPhotoLists> createState() => _AlbumPhotoListsState();
@@ -18,7 +19,7 @@ class _AlbumPhotoListsState extends State<AlbumPhotoLists> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<AlbumListBloc>(context).add(GetPhotoAlbumEvent(albumId: widget.albumId));
+    BlocProvider.of<AlbumListBloc>(context).add(GetPhotoAlbumEvent(albumId: widget.albumNum));
   }
 
   List<PhotoAlbums> _photoAlbums = [];
@@ -46,27 +47,16 @@ class _AlbumPhotoListsState extends State<AlbumPhotoLists> {
             return CarouselSlider.builder(
                 itemCount: _photoAlbums.length,
                 itemBuilder: (context, index, pageIndex) {
-                  print(_photoAlbums.length);
                   var currentAlbum = _photoAlbums[index];
+                  print(currentAlbum.thumbnailUrl);
                   return Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8),
                     child: SizedBox(
                       height: 150,
                       width: 150,
-                      child: Image.network(
+                      child: ExtendedImage.network(
                         currentAlbum.thumbnailUrl ?? "",
-                        loadingBuilder: (BuildContext context, Widget child,
-                            ImageChunkEvent? loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          );
-                        },
+                        cache: true,
                       ),
                     ),
                   );
