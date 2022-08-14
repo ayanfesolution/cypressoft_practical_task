@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../data/repository/album.repository.dart';
 
 class AlbumPhotoLists extends StatefulWidget {
-  AlbumPhotoLists({required this.albumId, Key? key}) : super(key: key);
-  int albumId;
+  const AlbumPhotoLists({required this.albumId, Key? key}) : super(key: key);
+  final int albumId;
 
   @override
   State<AlbumPhotoLists> createState() => _AlbumPhotoListsState();
